@@ -20,7 +20,15 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // REGISTRA ESTE INIMIGO NO ROUNDMANAGER
+        if (RoundManager.instance != null)
+        {
+            RoundManager.instance.RegisterEnemy(this);
+        }
+        else
+        {
+            Debug.LogError("RoundManager não encontrado!");
+        }
     }
 
     // Update is called once per frame
@@ -36,6 +44,8 @@ public class Enemy : MonoBehaviour
         m_enemySprite.sprite = enemyInfo.Sprite;
         m_enemyLife = enemyInfo.Vida;
         AtualizaBarraVida();
+
+        Debug.Log($"Inimigo {enemyInfo.name} configurado! Vida: {m_enemyLife}");
     }
 
     public void TomarDano(int dano)

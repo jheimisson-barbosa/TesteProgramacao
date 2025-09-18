@@ -139,12 +139,20 @@ public class DeckManager : MonoBehaviour
     {
         foreach (Card_SO card in cardsToShow)
         {
-            Card newCard = ((GameObject)Instantiate(m_cardPrefab, m_cardDeckImageTransform, instantiateInWorldSpace: true)).GetComponent<Card>();
+            // INSTANCIA DIRETAMENTE NO PAINEL CORRETO (m_bottomPanelTransform)
+            Card newCard = Instantiate(m_cardPrefab, m_bottomPanelTransform).GetComponent<Card>();
             newCard.SetCard(card);
             m_currentDeck.Add(newCard);
-            newCard.transform.SetParent(m_bottomPanelTransform);
+
+            // CONFIGURAÇÕES ESSENCIAIS PARA LAYOUT GROUP FUNCIONAR
+            newCard.transform.localScale = Vector3.one;
+            newCard.transform.localPosition = Vector3.zero;
+            newCard.transform.localRotation = Quaternion.identity;
+
+            // Força a atualização do layout
+            LayoutRebuilder.ForceRebuildLayoutImmediate(m_bottomPanelTransform as RectTransform);
+
             yield return new WaitForEndOfFrame();
-            newCard.transform.localScale = new Vector3(1, 1, 1);
             yield return new WaitForSeconds(0.1f);
         }
     }
