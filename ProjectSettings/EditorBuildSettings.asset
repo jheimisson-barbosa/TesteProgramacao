@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainGame.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/TelaDeVitoria.unity
+    guid: 1fe616244976ed74a87465c5e1826b2f
   m_configObjects: {}

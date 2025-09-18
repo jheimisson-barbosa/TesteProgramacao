@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
     private void OnLostGame()
     {
         m_gameState = GameState.CHALLENGE_LOST;
-        GameOverScreen.SetActive(true); //ATIVA TELA DE DERROTA
+        GameOverScreen.SetActive(false); //ATIVA TELA DE DERROTA
     }
 
     public void TryAgain()

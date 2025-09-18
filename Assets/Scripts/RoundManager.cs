@@ -2,8 +2,10 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class RoundManager : MonoBehaviour
 {
@@ -19,6 +21,10 @@ public class RoundManager : MonoBehaviour
     private List<Enemy_SO> m_enemies;
     [SerializeField]
     private Enemy m_currentEnemy;
+
+    [Header("Configuração de Vitória")]
+    [SerializeField] private string victorySceneName = "TelaDeVitoria"; // Nome exato da cena
+
 
     public Enemy CurrentEnemy => m_currentEnemy;
 
@@ -77,7 +83,7 @@ public class RoundManager : MonoBehaviour
     }
 
     public void FinishRound()
-    {
+    {  
         AddRound();
 
         // VERIFICA SE O INIMIGO EXISTE
@@ -87,16 +93,44 @@ public class RoundManager : MonoBehaviour
             return;
         }
 
-        // CORREÇÃO: verifica se a vida chegou a ZERO
+        // VERIFICA SE O INIMIGO MORREU
         if (m_currentEnemy.EnemyLife <= 0)
         {
             Debug.Log("Vitória! Inimigo derrotado!");
-            //IMPLEMENTAR VITÓRIA
+            LoadVictoryScene(); // ? CARREGA A CENA DE VITÓRIA
         }
         else
         {
             Debug.Log("Round finalizado, mas inimigo ainda vive");
         }
+    }
+
+    private void LoadVictoryScene()
+    {
+        // Verifica se o nome da cena está configurado
+        if (string.IsNullOrEmpty(victorySceneName))
+        {
+            Debug.LogError("Nome da cena de vitória não configurado! Verifique o Inspector.");
+            return;
+        }
+
+        // Verifica se a cena existe
+        if (SceneUtility.GetBuildIndexByScenePath(victorySceneName) < 0)
+        {
+            Debug.LogError($"Cena '{victorySceneName}' não encontrada no Build Settings!");
+            return;
+        }
+
+        Debug.Log($"Carregando cena de vitória: {victorySceneName}");
+
+        // Carrega a cena após um pequeno delay para animações
+        StartCoroutine(LoadVictorySceneWithDelay(1.5f));
+    }
+
+    private IEnumerator LoadVictorySceneWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(victorySceneName);
     }
 
     private void AddRound()

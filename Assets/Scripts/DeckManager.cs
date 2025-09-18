@@ -242,17 +242,25 @@ public class DeckManager : MonoBehaviour
             }
             yield return new WaitForSeconds(0.1f);
         }
+
         for (int i = selectedCards.Count - 1; i >= 0; i--)
         {
             selectedCards[i].gameObject.SetActive(false);
             selectedCards[i].DestroySelf();
         }
+
         if (drawMore)
         {
             DrawMoreCards();
         }
+
         m_canPickCards = true;
         SelectCardUI();
+
+
+        m_throwButton.interactable = true;    // Re-ativa botão CONFIRMAR
+        m_discardButton.interactable = true;  // Re-ativa botão DESCARTAR
+        
     }
 
     public void DrawMoreCards() //PUXA MAIS CARTAS PARA O JOGADOR, APÓS USAR UMA OU MAIS CARTAS

@@ -94,14 +94,23 @@ public class Card : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         {
             case "estocada":
                 RoundManager.instance.CurrentEnemy.TomarDano(CardInfo.Pontos);
+                DoAttackAnimation(m_cardVisual.transform); 
+                DoScaleAnimation(m_cardVisual.transform);
                 break;
             case "hemorragia":
+                RoundManager.instance.CurrentEnemy.TomarDano(CardInfo.Pontos);
+                DoHemorragiaAnimation(m_cardVisual.transform); 
                 break;
             case "passo":
+              
+
                 break;
             case "salto":
+
                 break;
             case "frasco":
+
+                DoPotionAnimation(m_cardVisual.transform);
                 break;
         }
         if(CardInfo.Tipo == Tipo.GOLPE)
@@ -119,7 +128,23 @@ public class Card : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     {
         target.transform.DOMoveX(transform.position.x + 2f, 0.3f).SetEase(Ease.InOutCirc).OnComplete(() => target.transform.DOMoveX(transform.position.x - 1f, 0.2f));
     }
+    private void DoHemorragiaAnimation(Transform target)
+    {
+        // Animação de sangramento (vermelho piscante)
+        target.GetComponent<Image>().DOColor(Color.red, 0.1f)
+            .SetLoops(3, LoopType.Yoyo)
+            .OnComplete(() => target.GetComponent<Image>().color = Color.white);
+    }
+    private void DoPotionAnimation(Transform target)
+    {
+        // Animação de poção (verde pulsante)
+        target.DOScale(new Vector3(1.5f, 1.5f, 1.5f), 0.3f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() => target.DOScale(Vector3.one, 0.2f));
 
+        target.GetComponent<Image>().DOColor(Color.green, 0.2f)
+            .OnComplete(() => target.GetComponent<Image>().color = Color.white);
+    }
     private void Update()
     {
         if (!m_selected)
